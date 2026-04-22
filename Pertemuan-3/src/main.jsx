@@ -54,6 +54,13 @@ const router = createBrowserRouter([
     ],
   },
   {
+    path: "mahasiswa",
+    children: [
+      { index: true, element: <Mahasiswa /> },
+      { path: ":nim", element: <MahasiswaDetail /> },
+    ],
+  },
+  {
     path: "*",
     element: <PageNotFound />,
   },

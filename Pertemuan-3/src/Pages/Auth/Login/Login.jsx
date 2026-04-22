@@ -1,36 +1,36 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { dummyUser } from "@/Data/Dummy";
 import Card from "@/Pages/Auth/Components/Card";
 import Form from "@/Pages/Auth/Components/Form";
 import Label from "@/Pages/Auth/Components/Label";
 import Input from "@/Pages/Auth/Components/Input";
 import Button from "@/Pages/Auth/Components/Button";
 import Heading from "@/Pages/Auth/Components/Heading";
-import { dummyUser } from "../../../Data/Dummy";
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     email: "",
     password: "",
-    remember: false,
   });
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (
-      form.email === dummyUser.email &&
-      form.password === dummyUser.password
-    ) {
+    const { email, password } = form;
+
+    if (email === dummyUser.email && password === dummyUser.password) {
       localStorage.setItem("user", JSON.stringify(dummyUser));
-      window.location.href = "/admin";
+      navigate("/admin/dashboard");
     } else {
       alert("Email atau password salah!");
     }

@@ -1,35 +1,43 @@
-import Card from "@/Pages/Admin/Components/Card";
-
+import { useParams, useNavigate } from "react-router-dom";
 import { mahasiswaList } from "@/Data/Dummy";
+import Card from "@/Pages/Admin/Components/Card";
 import Heading from "@/Pages/Admin/Components/Heading";
+import Button from "@/Pages/Admin/Components/Button";
 
 const MahasiswaDetail = () => {
-  const path = window.location.pathname;
-  const nim = path.split("/").pop();
+  const { nim } = useParams();
+  const navigate = useNavigate();
 
-  const mahasiswa = mahasiswaList.find((m) => m.nim === nim);
+  const data = mahasiswaList.find((m) => m.nim === nim);
 
-  if (!mahasiswa) {
-    return <p className="text-red-600">Data mahasiswa tidak ditemukan.</p>;
+  if (!data) {
+    return (
+      <Card>
+        <Heading as="h2">Detail Mahasiswa</Heading>
+        <p>Data mahasiswa tidak ditemukan.</p>
+        <Button onClick={() => navigate(-1)}>Kembali</Button>
+      </Card>
+    );
   }
 
   return (
     <Card>
-      <Heading as="h2" className="mb-4 text-left">
-        Detail Mahasiswa
-      </Heading>
-      <table className="table-auto text-sm w-full">
-        <tbody>
-          <tr>
-            <td className="py-2 px-4 font-medium">NIM</td>
-            <td className="py-2 px-4">{mahasiswa.nim}</td>
-          </tr>
-          <tr>
-            <td className="py-2 px-4 font-medium">Nama</td>
-            <td className="py-2 px-4">{mahasiswa.nama}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div className="flex justify-between items-center mb-4">
+        <Heading as="h2">Detail Mahasiswa</Heading>
+        <Button onClick={() => navigate(-1)}>Kembali</Button>
+      </div>
+
+      <div className="space-y-3">
+        <p>
+          <strong>NIM:</strong> {data.nim}
+        </p>
+        <p>
+          <strong>Nama:</strong> {data.nama}
+        </p>
+        <p>
+          <strong>Status:</strong> {data.status ? "Aktif" : "Tidak Aktif"}
+        </p>
+      </div>
     </Card>
   );
 };
