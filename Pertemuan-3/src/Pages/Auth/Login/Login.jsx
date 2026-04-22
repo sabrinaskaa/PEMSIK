@@ -1,12 +1,13 @@
 import { useState } from "react";
-import AuthLayout from "@/Pages/Auth/AuthLayout";
 import Card from "@/Pages/Auth/Components/Card";
 import Form from "@/Pages/Auth/Components/Form";
 import Label from "@/Pages/Auth/Components/Label";
 import Input from "@/Pages/Auth/Components/Input";
 import Button from "@/Pages/Auth/Components/Button";
+import Heading from "@/Pages/Auth/Components/Heading";
+import { dummyUser } from "../../../Data/Dummy";
 
-const Login = ({ onLoginSuccess }) => {
+const Login = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -24,76 +25,75 @@ const Login = ({ onLoginSuccess }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (form.email && form.password) {
-      alert("Login berhasil!");
-      onLoginSuccess();
+    if (
+      form.email === dummyUser.email &&
+      form.password === dummyUser.password
+    ) {
+      localStorage.setItem("user", JSON.stringify(dummyUser));
+      window.location.href = "/admin";
     } else {
-      alert("Email dan password harus diisi!");
+      alert("Email atau password salah!");
     }
   };
 
   return (
-    <AuthLayout>
-      <Card>
-        <h2 className="text-3xl font-semibold text-center text-blue-600 mb-6">
-          Login
-        </h2>
+    <Card>
+      <Heading as="h2">Login</Heading>
 
-        <Form onSubmit={handleSubmit}>
-          <div>
-            <Label htmlFor="email">Email</Label>
-            <Input
-              type="email"
-              name="email"
-              id="email"
-              required
-              placeholder="Masukkan email"
-              value={form.email}
+      <Form onSubmit={handleSubmit}>
+        <div>
+          <Label htmlFor="email">Email</Label>
+          <Input
+            type="email"
+            name="email"
+            id="email"
+            required
+            placeholder="Masukkan email"
+            value={form.email}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div>
+          <Label htmlFor="password">Password</Label>
+          <Input
+            type="password"
+            name="password"
+            id="password"
+            required
+            placeholder="Masukkan password"
+            value={form.password}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="flex justify-between items-center">
+          <label className="flex items-center">
+            <input
+              type="checkbox"
+              name="remember"
+              className="mr-2"
+              checked={form.remember}
               onChange={handleChange}
             />
-          </div>
+            <span className="text-sm text-gray-600">Ingat saya</span>
+          </label>
 
-          <div>
-            <Label htmlFor="password">Password</Label>
-            <Input
-              type="password"
-              name="password"
-              id="password"
-              required
-              placeholder="Masukkan password"
-              value={form.password}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="flex justify-between items-center">
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                name="remember"
-                className="mr-2"
-                checked={form.remember}
-                onChange={handleChange}
-              />
-              <span className="text-sm text-gray-600">Ingat saya</span>
-            </label>
-
-            <a href="#" className="text-sm text-blue-500 hover:underline">
-              Lupa password?
-            </a>
-          </div>
-
-          <Button type="submit">Sign In</Button>
-        </Form>
-
-        <p className="text-sm text-center text-gray-600 mt-4">
-          Belum punya akun?{" "}
-          <a href="#" className="text-blue-500 hover:underline">
-            Daftar
+          <a href="#" className="text-sm text-blue-500 hover:underline">
+            Lupa password?
           </a>
-        </p>
-      </Card>
-    </AuthLayout>
+        </div>
+
+        <Button type="submit">Sign In</Button>
+      </Form>
+
+      <p className="text-sm text-center text-gray-600 mt-4">
+        Belum punya akun?{" "}
+        <a href="#" className="text-blue-500 hover:underline">
+          Daftar
+        </a>
+      </p>
+    </Card>
   );
 };
 

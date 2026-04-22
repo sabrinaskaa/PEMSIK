@@ -1,7 +1,11 @@
 import { useState } from "react";
 
-const Header = ({ title = "Mahasiswa", onLogout }) => {
+const Header = ({ title = "Mahasiswa" }) => {
   const [open, setOpen] = useState(false);
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    window.location.href = "/";
+  };
 
   return (
     <header className="bg-white shadow-md">
@@ -23,7 +27,7 @@ const Header = ({ title = "Mahasiswa", onLogout }) => {
                 Profile
               </a>
               <button
-                onClick={onLogout}
+                onClick={handleLogout}
                 className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
               >
                 Logout
