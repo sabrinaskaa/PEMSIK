@@ -5,6 +5,8 @@ import Button from "@/Pages/Admin/Components/Button";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { mahasiswaList } from "@/Data/Dummy";
+import { confirmDelete, confirmUpdate } from "@/Utils/Helpers/SwalHelpers";
+import { toastSuccess, toastError } from "@/Utils/Helpers/ToastHelpers";
 
 import MahasiswaTable from "./MahasiswaTable";
 import MahasiswaModal from "./MahasiswaModal";
@@ -45,30 +47,38 @@ const Mahasiswa = () => {
   };
 
   const handleSubmit = (formData) => {
-    if (selectedMahasiswa) {
-      const confirmUpdate = window.confirm("Yakin ingin mengupdate data ini?");
-      if (!confirmUpdate) return;
+    if (!formData.nim || !formData.nama) {
+      toastError("NIM dan Nama wajib diisi");
+      return;
+    }
 
-      updateMahasiswa(selectedMahasiswa.nim, formData);
+    if (selectedMahasiswa) {
+      confirmUpdate(() => {
+        updateMahasiswa(selectedMahasiswa.nim, formData);
+        toastSuccess("Data berhasil diperbarui");
+        setModalOpen(false);
+        setSelectedMahasiswa(null);
+      });
     } else {
       const exists = mahasiswa.find((mhs) => mhs.nim === formData.nim);
+
       if (exists) {
-        alert("NIM harus unique");
+        toastError("NIM sudah terdaftar!");
         return;
       }
 
       storeMahasiswa(formData);
+      toastSuccess("Data berhasil ditambahkan");
+      setModalOpen(false);
+      setSelectedMahasiswa(null);
     }
-
-    setModalOpen(false);
-    setSelectedMahasiswa(null);
   };
 
   const handleDelete = (nim) => {
-    const confirmDelete = window.confirm("Yakin ingin menghapus data ini?");
-    if (!confirmDelete) return;
-
-    deleteMahasiswa(nim);
+    confirmDelete(() => {
+      deleteMahasiswa(nim);
+      toastSuccess("Data berhasil dihapus");
+    });
   };
 
   const handleCloseModal = () => {

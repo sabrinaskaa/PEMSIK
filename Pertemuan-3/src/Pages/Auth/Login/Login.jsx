@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { dummyUser } from "@/Data/Dummy";
+import { toastSuccess, toastError } from "@/Utils/Helpers/ToastHelpers";
 import Card from "@/Pages/Auth/Components/Card";
 import Form from "@/Pages/Auth/Components/Form";
 import Label from "@/Pages/Auth/Components/Label";
@@ -14,12 +15,15 @@ const Login = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
+    remember: false,
   });
 
   const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
     setForm({
       ...form,
-      [e.target.name]: e.target.value,
+      [name]: type === "checkbox" ? checked : value,
     });
   };
 
@@ -30,9 +34,10 @@ const Login = () => {
 
     if (email === dummyUser.email && password === dummyUser.password) {
       localStorage.setItem("user", JSON.stringify(dummyUser));
+      toastSuccess("Login berhasil!");
       navigate("/admin/dashboard");
     } else {
-      alert("Email atau password salah!");
+      toastError("Email atau password salah!");
     }
   };
 

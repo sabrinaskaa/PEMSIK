@@ -1,10 +1,13 @@
 import { useState } from "react";
+import { confirmLogout } from "@/Utils/Helpers/SwalHelpers";
 
 const Header = ({ title = "Mahasiswa" }) => {
   const [open, setOpen] = useState(false);
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    window.location.href = "/";
+    confirmLogout(() => {
+      localStorage.removeItem("user");
+      window.location.href = "/";
+    });
   };
 
   return (
